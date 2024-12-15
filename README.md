@@ -1,4 +1,4 @@
-This task is implemented using core php and postgresql
+
 #API Endpoints
 
 Initialize super admin:
