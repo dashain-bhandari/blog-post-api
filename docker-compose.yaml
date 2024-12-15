@@ -1,0 +1,58 @@
+version: "3.8"
+services:
+  db:
+    image: postgres
+    container_name: local_pgdb1
+    restart: always
+    ports:
+      - "5430:5432"
+    environment:
+      POSTGRES_USER: user-name
+      POSTGRES_PASSWORD: strong-password
+    volumes:
+      - local_pgdata:/var/lib/postgresql/data
+  
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user-name"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - blognetwork
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin5_container
+    restart: always
+    ports:
+      - "8880:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: strong-password
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - blognetwork
+  web:
+    build: .
+    ports:
+      - "5051:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=blog
+      - DB_USER=user-name
+      - DB_PASSWORD=strong-password
+    networks:
+      - blognetwork
+networks:
+  blognetwork:
+    driver: bridge
+volumes:
+  local_pgdata:
+  pgadmin-data:

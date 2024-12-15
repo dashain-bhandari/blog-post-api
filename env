@@ -1,0 +1,6 @@
+POSTGRES_USER=user-name
+POSTGRES_PASSWORD=strong-password
+POSTGRES_DB=restpract
+DEFAULT_USER=user-name@domain-name.com
+DEFAULT_PASSWORD=mypassword
+SECRET_KEY=J8xkncx
